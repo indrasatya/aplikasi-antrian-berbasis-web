@@ -12,7 +12,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
   $query = mysqli_query($mysqli, "SELECT no_antrian FROM tbl_antrian 
                                   WHERE tanggal='$tanggal' AND status='0' 
                                   ORDER BY no_antrian ASC LIMIT 1")
-                                  or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
+    or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
   // ambil jumlah baris data hasil query
   $rows = mysqli_num_rows($query);
 
@@ -26,7 +26,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
 
     // tampilkan data
     echo number_format($no_antrian, 0, '', '.');
-  } 
+  }
   // jika data "no_antrian" tidak ada
   else {
     // tampilkan "-"

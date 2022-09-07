@@ -174,6 +174,11 @@
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
 
   <script type="text/javascript">
+    // Get loket number from query param,
+    // Remind the staffs to access the loket dashboard by fill the loket param as their loket number
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+
     $(document).ready(function() {
       // tampilkan informasi antrian
       $('#jumlah-antrian').load('get_jumlah_antrian.php');
@@ -183,9 +188,9 @@
 
       // menampilkan data antrian menggunakan DataTables
       var table = $('#tabel-antrian').DataTable({
-        "lengthChange": false,              // non-aktifkan fitur "lengthChange"
-        "searching": false,                 // non-aktifkan fitur "Search"
-        "ajax": "get_antrian.php",          // url file proses tampil data dari database
+        "lengthChange": false, // non-aktifkan fitur "lengthChange"
+        "searching": false, // non-aktifkan fitur "Search"
+        "ajax": "get_antrian.php", // url file proses tampil data dari database
         // menampilkan data
         "columns": [{
             "data": "no_antrian",
@@ -207,12 +212,12 @@
               if (data["status"] === "") {
                 // sembunyikan button panggil
                 var btn = "-";
-              } 
+              }
               // jika data "status = 0"
               else if (data["status"] === "0") {
                 // tampilkan button panggil
                 var btn = "<button class=\"btn btn-success btn-sm rounded-circle\"><i class=\"bi-mic-fill\"></i></button>";
-              } 
+              }
               // jika data "status = 1"
               else if (data["status"] === "1") {
                 // tampilkan button ulangi panggilan
@@ -223,9 +228,9 @@
           },
         ],
         "order": [
-          [0, "desc"]             // urutkan data berdasarkan "no_antrian" secara descending
+          [0, "desc"] // urutkan data berdasarkan "no_antrian" secara descending
         ],
-        "iDisplayLength": 10,     // tampilkan 10 data per halaman
+        "iDisplayLength": 10, // tampilkan 10 data per halaman
       });
 
       // panggilan antrian dan update data
@@ -247,7 +252,7 @@
 
         // mainkan suara nomor antrian
         setTimeout(function() {
-          responsiveVoice.speak("Nomor Antrian, " + data["no_antrian"] + ", menuju, loket, 1", "Indonesian Male", {
+          responsiveVoice.speak("Nomor Antrian, " + data["no_antrian"] + `, menuju, loket, ${params ? params.loket ?? 1 : 1}`, "Indonesian Male", {
             rate: 0.9,
             pitch: 1,
             volume: 1
@@ -256,9 +261,11 @@
 
         // proses update data
         $.ajax({
-          type: "POST",               // mengirim data dengan method POST
-          url: "update.php",          // url file proses update data
-          data: { id: id }            // tentukan data yang dikirim
+          type: "POST", // mengirim data dengan method POST
+          url: "update.php", // url file proses update data
+          data: {
+            id: id
+          } // tentukan data yang dikirim
         });
       });
 
